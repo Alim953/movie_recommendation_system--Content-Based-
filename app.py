@@ -7,18 +7,14 @@ st.title('🎬 Movie Recommendation System')
 # Load data
 df = pd.read_csv('Movies.csv')
 movies_list = df.title.values
-import pickle
 import gzip
+import pickle
 
-# Load your large pickle
-with open('similarity.pkl', 'rb') as f:
+with gzip.open('similarity_compressed.pkl.gz', 'rb') as f:
     similarity = pickle.load(f)
 
-# Save it in compressed form
-with gzip.open('similarity_compressed.pkl.gz', 'wb') as f:
-    pickle.dump(similarity, f)
 
-print("✅ Compressed pickle file saved as similarity_compressed.pkl.gz")
+
 
 
 # TMDb API key
