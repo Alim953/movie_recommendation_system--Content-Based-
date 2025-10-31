@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import pickle
 import requests
 
 st.title('🎬 Movie Recommendation System')
@@ -8,7 +7,19 @@ st.title('🎬 Movie Recommendation System')
 # Load data
 df = pd.read_csv('Movies.csv')
 movies_list = df.title.values
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+import pickle
+import gzip
+
+# Load your large pickle
+with open('similarity.pkl', 'rb') as f:
+    similarity = pickle.load(f)
+
+# Save it in compressed form
+with gzip.open('similarity_compressed.pkl.gz', 'wb') as f:
+    pickle.dump(similarity, f)
+
+print("✅ Compressed pickle file saved as similarity_compressed.pkl.gz")
+
 
 # TMDb API key
 api_key = '41423f29ec2f9ac44fefef087afbdb8f'
