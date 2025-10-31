@@ -1,20 +1,33 @@
 import streamlit as st
 import pandas as pd
 import requests
+import os
+import requests
+import pickle
+
 
 st.title('🎬 Movie Recommendation System')
 
 # Load data
 df = pd.read_csv('Movies.csv')
 movies_list = df.title.values
-import gzip
-import pickle
 
-with gzip.open('similarity_compressed.pkl.gz', 'rb') as f:
+
+
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1lf1oggaP4PBnHMvF42NqPOfQDhrVkCqr"
+MODEL_PATH = "similarity.pkl"
+
+# === Download the model if not already there ===
+if not os.path.exists(MODEL_PATH):
+    st.info("Downloading model from Google Drive...")
+    r = requests.get(MODEL_URL)
+    with open(MODEL_PATH, "wb") as f:
+        f.write(r.content)
+    st.success("Model downloaded successfully!")
+
+# === Load the model ===
+with open(MODEL_PATH, "rb") as f:
     similarity = pickle.load(f)
-
-
-
 
 
 # TMDb API key
@@ -58,4 +71,10 @@ if st.button('Recommend'):
     for i in range(5):
         with cols[i]:
             st.image(po[i], caption=mo[i], use_container_width=True)
+
+
+
+
+
+
 
